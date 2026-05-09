@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "character")
+@Table(name = "game_character") //table is named differently than class due to Mysql reserving name "character"
 @EntityListeners(AuditingEntityListener.class)
 public class Character {
     @Id
