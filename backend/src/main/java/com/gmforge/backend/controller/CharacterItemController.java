@@ -1,6 +1,7 @@
 package com.gmforge.backend.controller;
 
 import com.gmforge.backend.dto.request.CreateAndAssignItemRequest;
+import com.gmforge.backend.dto.request.UpdateCharacterItemRequest;
 import com.gmforge.backend.dto.request.UpdateHiddenItemRequest;
 import com.gmforge.backend.dto.response.CharacterItemResponse;
 import com.gmforge.backend.service.CharacterItemService;
@@ -34,6 +35,12 @@ public class CharacterItemController {
     public ResponseEntity<CharacterItemResponse> updateHidden(@PathVariable Long id,
                                                               @RequestBody UpdateHiddenItemRequest request) {
         return ResponseEntity.ok(characterItemService.updateHidden(id, request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CharacterItemResponse> updateItem(@PathVariable Long id,
+                                                            @RequestBody UpdateCharacterItemRequest request) {
+        return ResponseEntity.ok(characterItemService.updateItem(id, request));
     }
 
     @DeleteMapping("/{id}")

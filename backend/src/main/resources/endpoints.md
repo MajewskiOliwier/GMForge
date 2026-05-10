@@ -202,10 +202,13 @@ All endpoints except `/api/auth/**` require `Authorization: Bearer <token>` head
 |--------|----------|------|
 | POST | `/api/character-item/:characterId` | See below |
 | GET | `/api/character-item/:characterId` | — |
+| PUT | `/api/character-item/:id` | See below |
 | PUT | `/api/character-item/:id/hidden` | See below |
 | DELETE | `/api/character-item/:id` | — |
 
-> POST — GM or character owner. PUT hidden flags — GM only.
+> POST — GM or character owner.
+> PUT item — GM or character owner.
+> PUT hidden flags — GM only.
 
 **POST body — Player:**
 ```json
@@ -224,7 +227,12 @@ All endpoints except `/api/auth/**` require `Authorization: Bearer <token>` head
 }
 ```
 
-**PUT body:**
+**PUT body — update item:**
+```json
+{ "name": "Sword +2", "description": "A sharp blade, magically enhanced" }
+```
+
+**PUT body — update hidden flags:**
 ```json
 { "isHidden": false, "hiddenName": null, "hiddenDescription": null }
 ```
