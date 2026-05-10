@@ -29,16 +29,16 @@ public class Character {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "character")
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CharacterAttribute> attributes;
 
-    @OneToMany(mappedBy = "character")
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Focus> focuses;
 
-    @OneToMany(mappedBy = "character")
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Truth> truths;
 
-    @OneToMany(mappedBy = "character")
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL)
     private List<CharacterItem> items;
 
     @CreatedDate

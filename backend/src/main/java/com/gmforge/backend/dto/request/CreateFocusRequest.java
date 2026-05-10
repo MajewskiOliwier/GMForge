@@ -6,5 +6,4 @@ import lombok.Data;
 public class CreateFocusRequest {
     private int level;
     private String text;
-    private Long characterId;
 }
