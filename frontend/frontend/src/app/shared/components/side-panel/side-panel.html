@@ -1,0 +1,234 @@
+<!-- ============================================================
+     GMForge — Side Panel
+     src/app/shared/components/side-panel/side-panel.component.html
+     ============================================================ -->
+
+<aside class="side-panel">
+
+  <!-- Close button (mobile) -->
+  <button class="panel-close btn-icon" (click)="close()" aria-label="Close panel">✕</button>
+
+  <!-- ======================================================
+       CHARACTER MODE
+       ====================================================== -->
+  @if (mode === 'character') {
+
+    @if (!character) {
+      <!-- Empty state — no character selected -->
+      <div class="panel-empty">
+        <span class="empty-hex" aria-hidden="true">⬡</span>
+        <p>Select a character to view their sheet.</p>
+      </div>
+    } @else {
+
+      <!-- Character header -->
+      <div class="char-header">
+        <div class="char-title-row">
+          <h3 class="char-name">{{ character.name }}</h3>
+          @if (character.isNpc) {
+            <span class="badge badge-npc-panel">NPC</span>
+          }
+        </div>
+        @if (!character.isNpc && character.playerUsername) {
+          <p class="char-player">Played by {{ character.playerUsername }}</p>
+        }
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Skills -->
+      @if (getSkills().length > 0) {
+        <div class="sheet-section">
+          <h4 class="section-label">Skills</h4>
+          <div class="attr-list">
+            @for (attr of getSkills(); track attr.id) {
+              <div class="attr-row">
+                <span class="attr-name">{{ attr.skill }}</span>
+                <div class="attr-dots">
+                  @for (dot of levelDots(attr.level); track dot) {
+                    <span
+                      class="dot"
+                      [class.filled]="dot <= attr.level"
+                    ></span>
+                  }
+                </div>
+                <span class="attr-level">{{ attr.level }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Styles -->
+      @if (getStyles().length > 0) {
+        <div class="sheet-section">
+          <h4 class="section-label">Styles</h4>
+          <div class="attr-list">
+            @for (attr of getStyles(); track attr.id) {
+              <div class="attr-row">
+                <span class="attr-name">{{ attr.style }}</span>
+                <div class="attr-dots">
+                  @for (dot of levelDots(attr.level); track dot) {
+                    <span
+                      class="dot"
+                      [class.filled]="dot <= attr.level"
+                    ></span>
+                  }
+                </div>
+                <span class="attr-level">{{ attr.level }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Focuses -->
+      @if ((character.focuses?.length ?? 0) > 0) {
+        <div class="sheet-section">
+          <h4 class="section-label">Focuses</h4>
+          <ul class="focus-list">
+            @for (focus of character.focuses; track focus.id) {
+              <li class="focus-item">
+                <span class="focus-level">{{ focus.level }}</span>
+                <span class="focus-text">{{ focus.text }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+
+      <!-- Truths -->
+      @if ((character.truths?.length  ?? 0 )> 0) {
+        <div class="sheet-section">
+          <h4 class="section-label">Truths</h4>
+          <ul class="truth-list">
+            @for (truth of character.truths; track truth.id) {
+              <li class="truth-item">
+                <span class="truth-diamond" aria-hidden="true">◆</span>
+                {{ truth.name }}
+              </li>
+            }
+          </ul>
+        </div>
+      }
+
+      <!-- Items -->
+      @if ((character.items?.length ?? 0) > 0) {
+        <div class="sheet-section">
+          <h4 class="section-label">Items</h4>
+          <div class="item-list">
+            @for (item of character.items; track item.id) {
+              <div class="item-card">
+                <div class="item-header">
+                  <!-- GMs see hidden name, players see real name or ??? -->
+                  <span class="item-name">
+                    @if (item.isHidden && !isGm) {
+                      {{ item.hiddenName ?? '???' }}
+                    } @else {
+                      {{ item.name }}
+                    }
+                  </span>
+                  <span class="badge badge-muted item-type">{{ item.type }}</span>
+                </div>
+                <p class="item-desc">
+                  @if (item.isHidden && !isGm) {
+                    {{ item.hiddenDescription ?? 'Unknown.' }}
+                  } @else {
+                    {{ item.description }}
+                  }
+                </p>
+                @if (item.isHidden && isGm) {
+                  <p class="item-hidden-note">
+                    🔒 Hidden as: <em>{{ item.hiddenName ?? '???' }}</em>
+                  </p>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+    }
+  }
+
+  <!-- ======================================================
+       GM PANEL MODE
+       ====================================================== -->
+  @if (mode === 'gm-panel') {
+    <div class="gm-panel">
+
+      <div class="char-header">
+        <h3 class="char-name">GM Panel</h3>
+        @if (party?.currentSession) {
+          <p class="char-player">
+            Active: Session {{ party!.currentSession!.sessionNumber }}
+            @if (party!.currentSession!.name) {
+              — {{ party!.currentSession!.name }}
+            }
+          </p>
+        } @else {
+          <p class="char-player text-muted">No active session</p>
+        }
+      </div>
+
+      <hr class="divider" />
+
+      <!-- Session control -->
+      <div class="sheet-section">
+        <h4 class="section-label">Session</h4>
+        <button class="btn-primary gm-action-btn" (click)="openSessionOverlay()">
+          ▶ Start Session {{ nextSessionNumber }}
+        </button>
+      </div>
+
+    </div>
+  }
+
+</aside>
+
+<!-- ============================================================
+     Session Start Overlay
+     ============================================================ -->
+@if (showSessionOverlay) {
+  <div class="overlay-backdrop" (click)="closeSessionOverlay()">
+    <div class="overlay-panel" (click)="$event.stopPropagation()">
+
+      <h3>Start New Session</h3>
+
+      <div class="session-number-badge">
+        Session {{ nextSessionNumber }}
+      </div>
+
+      <div class="form-group">
+        <label for="sessionName">Session Name <span class="optional">(optional)</span></label>
+        <input
+          id="sessionName"
+          type="text"
+          [(ngModel)]="sessionName"
+          placeholder="e.g. The Heist"
+          [disabled]="creatingSession"
+          (keyup.enter)="confirmStartSession()"
+        />
+      </div>
+
+      @if (sessionError) {
+        <p class="form-error">{{ sessionError }}</p>
+      }
+
+      <div class="overlay-actions">
+        <button class="btn-ghost" (click)="closeSessionOverlay()" [disabled]="creatingSession">
+          Cancel
+        </button>
+        <button class="btn-primary" (click)="confirmStartSession()" [disabled]="creatingSession">
+          @if (creatingSession) {
+            <span class="spinner"></span>
+            Starting…
+          } @else {
+            Confirm
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

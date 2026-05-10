@@ -1,0 +1,97 @@
+<!-- ============================================================
+     GMForge — Party Logs Page
+     src/app/features/party/party-logs-page/party-logs-page.component.html
+     ============================================================ -->
+
+<app-navbar />
+
+<div class="page-content">
+  <div class="container">
+
+    <!-- Header -->
+    <div class="logs-header">
+      <div class="heading-block">
+        <a class="back-link" [routerLink]="['/party', partyId]">← Back to Party</a>
+        <div class="heading-ornament">
+          <h2>Party Logs</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add log entry (available to all members) -->
+    <div class="add-log-section">
+      <div class="form-group">
+        <label for="logEntry">New Log Entry</label>
+        <textarea
+          id="logEntry"
+          rows="3"
+          [(ngModel)]="newLogText"
+          placeholder="The party entered the fortress under cover of darkness…"
+          [disabled]="addingLog"
+        ></textarea>
+      </div>
+      @if (addLogError) {
+        <p class="form-error">{{ addLogError }}</p>
+      }
+      <div class="add-log-actions">
+        <button
+          class="btn-primary"
+          (click)="submitLog()"
+          [disabled]="addingLog || !newLogText.trim()"
+        >
+          @if (addingLog) {
+            <span class="spinner"></span>
+            Adding…
+          } @else {
+            Add Entry
+          }
+        </button>
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Loading -->
+    @if (loading) {
+      <div class="logs-loading">
+        <div class="spinner-lg"></div>
+        <p>Loading logs…</p>
+      </div>
+    }
+
+    <!-- Error -->
+    @if (!loading && error) {
+      <div class="logs-empty">
+        <span>⚠</span>
+        <p>{{ error }}</p>
+        <button class="btn-ghost" (click)="loadLogs()">Retry</button>
+      </div>
+    }
+
+    <!-- Empty -->
+    @if (!loading && !error && logs.length === 0) {
+      <div class="logs-empty">
+        <span class="empty-icon">📜</span>
+        <p>No log entries yet. Be the first to chronicle your adventure.</p>
+      </div>
+    }
+
+    <!-- Log entries -->
+    @if (!loading && !error && logs.length > 0) {
+      <ul class="log-list">
+        @for (log of logs; track log.id) {
+          <li class="log-entry">
+            <div class="log-meta">
+              <span class="log-author">{{ log.createdByUsername }}</span>
+              <span class="log-date">{{ formatDate(log.createdAt) }}</span>
+            </div>
+            <p class="log-description">{{ log.description }}</p>
+          </li>
+        }
+      </ul>
+    }
+
+  </div>
+</div>
+
+<app-footer />

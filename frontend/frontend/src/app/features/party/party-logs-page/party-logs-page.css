@@ -1,0 +1,173 @@
+/* ============================================================
+   GMForge — Party Logs Page Styles
+   src/app/features/party/party-logs-page/party-logs-page.component.css
+   ============================================================ */
+
+/* ---- Header --------------------------------------------- */
+.logs-header {
+  margin-bottom: var(--space-xl);
+}
+
+.heading-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.back-link {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.back-link:hover {
+  color: var(--accent-primary);
+}
+
+/* ---- Add log section ------------------------------------ */
+.add-log-section {
+  background: var(--bg-surface);
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  animation: slideUp 0.4s ease both;
+}
+
+.add-log-section textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.add-log-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-md);
+}
+
+/* ---- Loading / empty ------------------------------------- */
+.logs-loading,
+.logs-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  min-height: 200px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.spinner-lg {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--accent-muted);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  opacity: 0.4;
+}
+
+/* ---- Log list ------------------------------------------- */
+.log-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ---- Log entry ------------------------------------------ */
+.log-entry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-lg) 0;
+  border-bottom: var(--border-subtle);
+  animation: fadeIn 0.3s ease both;
+  position: relative;
+}
+
+/* Gold left accent line */
+.log-entry::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--space-lg));
+  top: var(--space-lg);
+  bottom: var(--space-lg);
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent-muted), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.log-entry:hover::before {
+  opacity: 1;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+/* ---- Log meta ------------------------------------------- */
+.log-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.log-author {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.log-date {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-disabled);
+  letter-spacing: 0.04em;
+}
+
+/* ---- Log description ------------------------------------ */
+.log-description {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+/* ---- Spinner -------------------------------------------- */
+.spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ---- Responsive ----------------------------------------- */
+@media (max-width: 600px) {
+  .add-log-section {
+    padding: var(--space-md);
+  }
+}

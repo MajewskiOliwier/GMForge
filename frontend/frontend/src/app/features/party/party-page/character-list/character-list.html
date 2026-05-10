@@ -1,0 +1,33 @@
+<section class="character-list">
+
+  <!-- Section header -->
+  <div class="list-header">
+    <div class="heading-ornament">
+      <h3>{{ title }}</h3>
+    </div>
+    @if (canAdd) {
+      <button class="btn-ghost add-btn" (click)="onAddClicked()">
+        + Add
+      </button>
+    }
+  </div>
+
+  <!-- Cards -->
+  @if (characters.length > 0) {
+    <div class="cards-grid">
+      @for (character of characters; track character.id) {
+        <app-character-card
+          [character]="character"
+          [selected]="selectedCharacterId === character.id"
+          (cardClicked)="onCardClicked($event)"
+        />
+      }
+    </div>
+  } @else {
+    <div class="empty-list">
+      <span class="empty-icon" aria-hidden="true">⬡</span>
+      <p>No {{ title.toLowerCase() }} yet.</p>
+    </div>
+  }
+
+</section>

@@ -1,0 +1,115 @@
+<!-- ============================================================
+     GMForge — Party Page
+     src/app/features/party/party-page/party-page.component.html
+     ============================================================ -->
+
+<app-navbar />
+
+<div class="page-content">
+  <div class="container">
+
+    <!-- Loading -->
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner-lg"></div>
+        <p>Loading party…</p>
+      </div>
+    }
+
+    <!-- Error -->
+    @if (!loading && error) {
+      <div class="error-state">
+        <span>⚠</span>
+        <p>{{ error }}</p>
+        <button class="btn-ghost" (click)="loadAll()">Retry</button>
+      </div>
+    }
+
+    <!-- Main layout -->
+    @if (!loading && !error && party) {
+
+      <!-- Party header -->
+      <div class="party-header">
+        <div class="party-title-block">
+          <a class="back-link" routerLink="/home">← Parties</a>
+          <h2 class="party-title">{{ party.name }}</h2>
+          <div class="party-meta">
+            <span class="badge badge-muted">
+              GM: {{ party.gameMaster.username }}
+            </span>
+            <span class="badge badge-muted">
+              {{ party.memberCount }} {{ party.memberCount === 1 ? 'member' : 'members' }}
+            </span>
+            @if (party.currentSession) {
+              <span class="badge badge-gold">
+                Session {{ party.currentSession.sessionNumber }}
+                @if (party.currentSession.name) {
+                  — {{ party.currentSession.name }}
+                }
+              </span>
+            }
+          </div>
+        </div>
+
+        <!-- GM controls -->
+        <div class="party-actions">
+          <a class="btn-ghost logs-btn" [routerLink]="['/party', partyId, 'logs']">
+            📜 Logs
+          </a>
+          @if (isGm) {
+            <button class="btn-primary" (click)="openGmPanel()">
+              ⚙ GM Panel
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Content: characters + side panel -->
+      <div class="party-layout">
+
+        <!-- Left: character grid -->
+        <div class="character-section">
+
+          <!-- Player characters -->
+          <app-character-list
+            title="Characters"
+            [characters]="playerCharacters"
+            [canAdd]="isGm"
+            [selectedCharacterId]="selectedCharacter?.id ?? null"
+            (characterSelected)="onCharacterSelected($event)"
+            (addClicked)="onAddPlayerClicked()"
+          />
+
+          <!-- NPCs -->
+          <div class="npc-section">
+            <app-character-list
+              title="NPCs"
+              [characters]="npcCharacters"
+              [canAdd]="isGm"
+              [selectedCharacterId]="selectedCharacter?.id ?? null"
+              (characterSelected)="onCharacterSelected($event)"
+              (addClicked)="onAddNpcClicked()"
+            />
+          </div>
+
+        </div>
+
+        <!-- Right: side panel (desktop always visible, mobile conditional) -->
+        <div class="panel-wrapper" [class.panel-visible]="panelVisible">
+          <app-side-panel
+            [mode]="panelMode"
+            [character]="selectedCharacter"
+            [party]="party"
+            [isGm]="isGm"
+            (sessionCreated)="onSessionCreated()"
+            (panelClose)="closePanel()"
+          />
+        </div>
+
+      </div>
+    }
+
+  </div>
+</div>
+
+<app-footer />

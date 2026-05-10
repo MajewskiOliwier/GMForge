@@ -1,0 +1,59 @@
+<nav class="navbar">
+  <div class="navbar-inner">
+
+    <a class="navbar-brand" routerLink="/home" (click)="closeMenu()">
+      <span class="brand-mark">⬡</span>
+      <span class="brand-name">GMForge</span>
+    </a>
+
+    @if (isLoggedIn()) {
+      <ul class="navbar-links">
+        <li>
+          <a routerLink="/home"
+             routerLinkActive="active"
+             (click)="closeMenu()">
+            Parties
+          </a>
+        </li>
+        <li>
+          <a routerLink="/settings/preferences"
+             routerLinkActive="active"
+             (click)="closeMenu()">
+            Preferences
+          </a>
+        </li>
+      </ul>
+    }
+
+    <div class="navbar-right">
+      @if (isLoggedIn()) {
+        <span class="navbar-username">{{ currentUser()?.username }}</span>
+        <button class="btn-ghost navbar-logout" (click)="logout()">
+          Logout
+        </button>
+      } @else {
+        <a class="btn-ghost" routerLink="/login">Sign In</a>
+      }
+
+      <button class="hamburger" (click)="toggleMenu()" aria-label="Toggle menu">
+        <span [class.open]="menuOpen"></span>
+        <span [class.open]="menuOpen"></span>
+        <span [class.open]="menuOpen"></span>
+      </button>
+    </div>
+
+  </div>
+
+  @if (menuOpen) {
+    <div class="mobile-menu">
+      @if (isLoggedIn()) {
+        <a routerLink="/home"            (click)="closeMenu()">Parties</a>
+        <a routerLink="/settings/preferences" (click)="closeMenu()">Preferences</a>
+        <button class="btn-danger mobile-logout" (click)="logout()">Logout</button>
+      } @else {
+        <a routerLink="/login"    (click)="closeMenu()">Sign In</a>
+        <a routerLink="/register" (click)="closeMenu()">Register</a>
+      }
+    </div>
+  }
+</nav>

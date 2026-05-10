@@ -1,0 +1,57 @@
+/* ============================================================
+   GMForge — Character List Styles
+   src/app/features/party/party-page/character-list/character-list.component.css
+   ============================================================ */
+
+.character-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ---- Header --------------------------------------------- */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.list-header .heading-ornament {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.add-btn {
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* ---- Grid ----------------------------------------------- */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-md);
+}
+
+/* ---- Empty state ---------------------------------------- */
+.empty-list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  color: var(--text-disabled);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  border-style: dashed;
+}
+
+.empty-icon {
+  font-size: 1.2rem;
+  color: var(--accent-muted);
+  opacity: 0.4;
+}

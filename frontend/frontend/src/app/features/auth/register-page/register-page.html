@@ -1,0 +1,89 @@
+<div class="auth-root">
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <div class="auth-card">
+
+    <!-- Header -->
+    <div class="auth-header">
+      <a class="back-brand" routerLink="/welcome">
+        <span class="brand-hex">⬡</span>
+        <span class="brand-name">GMForge</span>
+      </a>
+      <div class="ornament" aria-hidden="true">
+        <span class="ornament-line"></span>
+        <span class="ornament-diamond">◆</span>
+        <span class="ornament-line"></span>
+      </div>
+      <h2 class="auth-title">Join the Forge</h2>
+      <p class="auth-subtitle">Create your account</p>
+    </div>
+
+    <!-- Form -->
+    <form class="auth-form" (ngSubmit)="onSubmit()" #registerForm="ngForm">
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          placeholder="your_username"
+          autocomplete="username"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="you@email.com"
+          autocomplete="email"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="••••••••"
+          autocomplete="new-password"
+          [disabled]="loading"
+        />
+      </div>
+
+      @if (error) {
+        <p class="form-error" role="alert">{{ error }}</p>
+      }
+
+      <button
+        type="submit"
+        class="btn-primary auth-submit"
+        [disabled]="loading"
+      >
+        @if (loading) {
+          <span class="spinner" aria-hidden="true"></span>
+          Creating account…
+        } @else {
+          Create Account
+        }
+      </button>
+
+    </form>
+
+    <!-- Footer link -->
+    <p class="auth-footer-link">
+      Already have an account?
+      <a routerLink="/login">Sign in</a>
+    </p>
+
+  </div>
+</div>

@@ -1,1 +1,589 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================================
+   GMForge — Global Stylesheet
+   All theme tokens live here. Change one variable, change everything.
+   ============================================================ */
+
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap');
+
+/* ============================================================
+   DARK THEME (default)
+   Black & gold — Dishonored aesthetic
+   ============================================================ */
+:root,
+body.theme-dark {
+  /* --- Backgrounds --- */
+  --bg-base:        #0a0a0a;   /* deepest black */
+  --bg-surface:     #111111;   /* card / panel background */
+  --bg-elevated:    #1a1a1a;   /* raised elements, inputs */
+  --bg-overlay:     rgba(0, 0, 0, 0.78); /* modal backdrop */
+
+  /* --- Gold accent family --- */
+  --accent-primary:   #c9a84c; /* main gold */
+  --accent-bright:    #e8c96b; /* hover / active gold */
+  --accent-muted:     #7a6230; /* subtle gold — borders, dividers */
+  --accent-glow:      rgba(201, 168, 76, 0.18); /* glow shadow */
+
+  /* --- Text --- */
+  --text-primary:   #e8e0cc;  /* warm off-white */
+  --text-secondary: #9a9080;  /* muted, labels */
+  --text-disabled:  #4a4540;  /* disabled state */
+  --text-inverse:   #0a0a0a;  /* text on gold buttons */
+
+  /* --- State colors --- */
+  --color-danger:   #9b2335;
+  --color-danger-hover: #c42b41;
+  --color-success:  #3a6b4a;
+  --color-warning:  #7a5c20;
+
+  /* --- Borders --- */
+  --border-subtle:  1px solid #2a2520;
+  --border-accent:  1px solid var(--accent-muted);
+  --border-bright:  1px solid var(--accent-primary);
+
+  /* --- Shadows --- */
+  --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.6);
+  --shadow-md:   0 4px 20px rgba(0, 0, 0, 0.8);
+  --shadow-gold: 0 0 20px var(--accent-glow);
+
+  /* --- Typography --- */
+  --font-display: 'Cinzel', Georgia, serif;       /* headings, titles */
+  --font-body:    'Crimson Text', Georgia, serif; /* body text */
+  --font-mono:    'Share Tech Mono', monospace;   /* codes, tags */
+
+  /* --- Spacing scale --- */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+  --space-2xl: 64px;
+
+  /* --- Border radius --- */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* --- Transitions --- */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* --- Layout --- */
+  --sidebar-width:    340px;
+  --navbar-height:    60px;
+  --panel-max-width:  1200px;
+
+  /* --- Scrollbar --- */
+  --scrollbar-track: #111111;
+  --scrollbar-thumb: #3a3020;
+  --scrollbar-thumb-hover: var(--accent-muted);
+}
+
+/* ============================================================
+   LIGHT THEME
+   Aged parchment & ink — like a worn assassin's dossier
+   ============================================================ */
+body.theme-light {
+  --bg-base:        #f0ead8;
+  --bg-surface:     #e8dfc8;
+  --bg-elevated:    #dfd5ba;
+  --bg-overlay:     rgba(20, 15, 10, 0.65);
+
+  --accent-primary:   #5c3d1a;  /* deep amber-brown */
+  --accent-bright:    #7a5228;
+  --accent-muted:     #a88054;
+  --accent-glow:      rgba(92, 61, 26, 0.15);
+
+  --text-primary:   #1a120a;
+  --text-secondary: #5c4a32;
+  --text-disabled:  #a09070;
+  --text-inverse:   #f0ead8;
+
+  --color-danger:   #8b1a22;
+  --color-danger-hover: #a82030;
+  --color-success:  #2a5a38;
+  --color-warning:  #7a5010;
+
+  --border-subtle:  1px solid #c8b898;
+  --border-accent:  1px solid var(--accent-muted);
+  --border-bright:  1px solid var(--accent-primary);
+
+  --shadow-sm:   0 2px 8px rgba(20, 10, 0, 0.15);
+  --shadow-md:   0 4px 20px rgba(20, 10, 0, 0.25);
+  --shadow-gold: 0 0 20px var(--accent-glow);
+
+  --scrollbar-track: #e8dfc8;
+  --scrollbar-thumb: #c8b090;
+  --scrollbar-thumb-hover: var(--accent-muted);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  min-height: 100vh;
+  transition: background-color var(--transition-slow), color var(--transition-slow);
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+}
+
+h1 { font-size: 2.2rem; }
+h2 { font-size: 1.7rem; }
+h3 { font-size: 1.35rem; }
+h4 { font-size: 1.1rem; }
+
+p {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--accent-bright);
+}
+
+small {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   GLOBAL FORM ELEMENTS
+   ============================================================ */
+input, textarea, select {
+  width: 100%;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: var(--border-accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-gold);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-disabled);
+}
+
+label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+/* ============================================================
+   GLOBAL BUTTONS
+   ============================================================ */
+
+/* Primary — gold fill */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+.btn-primary:hover {
+  background: var(--accent-bright);
+  box-shadow: var(--shadow-gold);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Ghost — outlined */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: transparent;
+  color: var(--accent-primary);
+  border: var(--border-bright);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.btn-ghost:hover {
+  background: var(--accent-glow);
+  box-shadow: var(--shadow-gold);
+}
+
+/* Danger */
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  background: var(--color-danger);
+  color: #f0d0d0;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.btn-danger:hover {
+  background: var(--color-danger-hover);
+}
+
+/* Icon-only button */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--text-secondary);
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+.btn-icon:hover {
+  color: var(--accent-primary);
+  border-color: var(--accent-muted);
+  background: var(--accent-glow);
+}
+
+button:disabled,
+.btn-primary:disabled,
+.btn-ghost:disabled,
+.btn-danger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ============================================================
+   GLOBAL CARD
+   ============================================================ */
+.card {
+  background: var(--bg-surface);
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+.card:hover {
+  border-color: var(--accent-muted);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   DIVIDERS & DECORATIVE
+   ============================================================ */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-muted), transparent);
+  margin: var(--space-lg) 0;
+  border: none;
+}
+
+.divider-vertical {
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--accent-muted), transparent);
+  align-self: stretch;
+}
+
+/* Gold ornament line used beneath section headings */
+.heading-ornament {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+.heading-ornament h2,
+.heading-ornament h3 {
+  white-space: nowrap;
+}
+.heading-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-muted), transparent);
+}
+
+/* ============================================================
+   OVERLAY / MODAL BACKDROP
+   ============================================================ */
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn var(--transition-base) ease;
+}
+
+.overlay-panel {
+  background: var(--bg-surface);
+  border: var(--border-accent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  min-width: 320px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: var(--shadow-md), var(--shadow-gold);
+  animation: slideUp var(--transition-base) ease;
+}
+
+.overlay-panel h3 {
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.overlay-actions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  justify-content: flex-end;
+}
+
+/* ============================================================
+   BADGES & TAGS
+   ============================================================ */
+.badge {
+  display: inline-block;
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.badge-gold {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-muted);
+}
+
+.badge-muted {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: var(--border-subtle);
+}
+
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+.container {
+  max-width: var(--panel-max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.page-content {
+  padding-top: calc(var(--navbar-height) + var(--space-xl));
+  padding-bottom: var(--space-2xl);
+  min-height: 100vh;
+}
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
+
+.text-center { text-align: center; }
+.text-muted { color: var(--text-secondary); }
+.text-accent { color: var(--accent-primary); }
+.text-danger { color: var(--color-danger); }
+
+.w-full { width: 100%; }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+
+/* ============================================================
+   FORM GROUP
+   ============================================================ */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-md);
+}
+
+.form-error {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-danger);
+  margin-top: var(--space-xs);
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Gold shimmer for special headings */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--accent-muted) 0%,
+    var(--accent-bright) 40%,
+    var(--accent-primary) 60%,
+    var(--accent-muted) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ============================================================
+   LOADING SKELETON
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-elevated) 25%,
+    var(--bg-surface) 50%,
+    var(--bg-elevated) 75%
+  );
+  background-size: 200% auto;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ============================================================
+   SCROLLABLE LIST
+   ============================================================ */
+.scroll-list {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINTS
+   Keep in sync with Angular breakpoints if needed.
+   Mobile-first: base = mobile, then expand.
+   ============================================================ */
+/* Tablet+ */
+@media (min-width: 768px) {
+  h1 { font-size: 2.8rem; }
+  h2 { font-size: 2rem; }
+}
+
+/* Desktop+ */
+@media (min-width: 1024px) {
+  .page-content {
+    padding-top: calc(var(--navbar-height) + var(--space-2xl));
+  }
+}

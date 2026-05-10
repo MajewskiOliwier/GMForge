@@ -1,0 +1,187 @@
+/* ============================================================
+   GMForge — Auth Pages Shared Styles
+   Used by login-page and register-page.
+   src/app/features/authentication/login-page/login-page.component.css
+   src/app/features/authentication/register-page/register-page.component.css
+   (copy this file into both locations)
+   ============================================================ */
+
+/* ---- Root ------------------------------------------------ */
+.auth-root {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+  overflow: hidden;
+  padding: var(--space-xl) var(--space-md);
+}
+
+/* Subtle grid background */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--accent-muted) 1px, transparent 1px),
+    linear-gradient(90deg, var(--accent-muted) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.04;
+  pointer-events: none;
+}
+
+.auth-root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 70% at 50% 50%,
+    transparent 0%,
+    var(--bg-base) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ---- Card ------------------------------------------------ */
+.auth-card {
+  position: relative;
+  z-index: 2;
+  background: var(--bg-surface);
+  border: var(--border-accent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-xl);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-md), var(--shadow-gold);
+  animation: slideUp 0.5s ease both;
+}
+
+/* ---- Header --------------------------------------------- */
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.back-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  margin-bottom: var(--space-xs);
+}
+
+.brand-hex {
+  font-size: 1.8rem;
+  color: var(--accent-primary);
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+/* Ornament */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 260px;
+}
+
+.ornament-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-muted), transparent);
+}
+
+.ornament-diamond {
+  color: var(--accent-primary);
+  font-size: 0.6rem;
+  opacity: 0.8;
+}
+
+.auth-title {
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  margin-top: var(--space-xs);
+}
+
+.auth-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ---- Form ----------------------------------------------- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: var(--space-sm);
+  padding: var(--space-md);
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+}
+
+/* ---- Spinner -------------------------------------------- */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- Footer link ---------------------------------------- */
+.auth-footer-link {
+  margin-top: var(--space-lg);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.auth-footer-link a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  margin-left: var(--space-xs);
+  transition: color var(--transition-fast);
+}
+
+.auth-footer-link a:hover {
+  color: var(--accent-bright);
+}
+
+/* ---- Responsive ----------------------------------------- */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: var(--space-lg) var(--space-md);
+  }
+}

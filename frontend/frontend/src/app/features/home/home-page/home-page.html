@@ -1,0 +1,140 @@
+<!-- ============================================================
+     GMForge — Home Page
+     src/app/features/home/home-page/home-page.component.html
+     ============================================================ -->
+
+<app-navbar />
+
+<div class="page-content">
+  <div class="container">
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="heading-ornament">
+        <h2>Your Parties</h2>
+      </div>
+      <button class="btn-primary" (click)="openCreateOverlay()">
+        + New Party
+      </button>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+      <div class="cards-grid">
+        @for (i of [1,2,3]; track i) {
+          <div class="party-card skeleton-card">
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-line"></div>
+            <div class="skeleton skeleton-line short"></div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Error -->
+    @if (!loading && error) {
+      <div class="state-message">
+        <span class="state-icon">⚠</span>
+        <p>{{ error }}</p>
+        <button class="btn-ghost" (click)="loadParties()">Retry</button>
+      </div>
+    }
+
+    <!-- Empty state -->
+    @if (!loading && !error && parties.length === 0) {
+      <div class="state-message">
+        <span class="state-icon">⬡</span>
+        <p>You are not part of any party yet.</p>
+        <button class="btn-primary" (click)="openCreateOverlay()">
+          Create your first party
+        </button>
+      </div>
+    }
+
+    <!-- Party cards grid -->
+    @if (!loading && !error && parties.length > 0) {
+      <div class="cards-grid">
+        @for (party of parties; track party.id) {
+          <a class="party-card" [routerLink]="['/party', party.id]">
+
+            <!-- Card top -->
+            <div class="card-top">
+              <h3 class="party-name">{{ party.name }}</h3>
+              <span class="badge badge-gold">
+                {{ party.memberCount }} {{ party.memberCount === 1 ? 'member' : 'members' }}
+              </span>
+            </div>
+
+            <!-- GM -->
+            <p class="party-gm">
+              <span class="label">Game Master</span>
+              <span class="value">{{ party.gameMasterUsername }}</span>
+            </p>
+
+            <!-- Session -->
+            <div class="party-session">
+              @if (party.currentSessionNumber > 0) {
+                <span class="badge badge-muted">
+                  Session {{ party.currentSessionNumber }}
+                  @if (party.currentSessionName) {
+                    — {{ party.currentSessionName }}
+                  }
+                </span>
+              } @else {
+                <span class="badge badge-muted">No active session</span>
+              }
+            </div>
+
+            <!-- Arrow -->
+            <div class="card-arrow">→</div>
+
+          </a>
+        }
+      </div>
+    }
+
+  </div>
+</div>
+
+<app-footer />
+
+<!-- Create Party Overlay -->
+@if (showCreateOverlay) {
+  <div class="overlay-backdrop" (click)="closeCreateOverlay()">
+    <div class="overlay-panel" (click)="$event.stopPropagation()">
+
+      <h3>New Party</h3>
+
+      <div class="form-group">
+        <label for="partyName">Party Name</label>
+        <input
+          id="partyName"
+          type="text"
+          [(ngModel)]="newPartyName"
+          placeholder="The Shadow Collective"
+          [disabled]="creating"
+          (keyup.enter)="submitCreateParty()"
+        />
+      </div>
+
+      @if (createError) {
+        <p class="form-error">{{ createError }}</p>
+      }
+
+      <div class="overlay-actions">
+        <button class="btn-ghost" (click)="closeCreateOverlay()" [disabled]="creating">
+          Cancel
+        </button>
+        <button class="btn-primary" (click)="submitCreateParty()" [disabled]="creating">
+          @if (creating) {
+            <span class="spinner"></span>
+            Creating…
+          } @else {
+            Create
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}
