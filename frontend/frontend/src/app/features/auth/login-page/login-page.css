@@ -9,7 +9,6 @@
   padding: var(--space-xl) var(--space-md);
 }
 
-/* Subtle grid background */
 .bg-grid {
   position: absolute;
   inset: 0;

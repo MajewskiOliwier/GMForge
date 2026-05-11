@@ -11,6 +11,7 @@ import { UserService } from '../../../core/services/user';
   templateUrl: './login-page.html',
   styleUrl: './login-page.css'
 })
+
 export class LoginPage {
   private authService = inject(Auth);
   private userService = inject(UserService);

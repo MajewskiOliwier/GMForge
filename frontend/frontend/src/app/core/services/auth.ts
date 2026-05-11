@@ -47,7 +47,7 @@ export class Auth {
   }
 
   private handleAuthSuccess(res: AuthResponse): void {
-    localStorage.setItem(TOKEN_KEY, res.token);
+    localStorage.setItem(TOKEN_KEY, res.jwtToken);
     localStorage.setItem(USER_KEY, JSON.stringify(res.user));
     this.currentUser.set(res.user);
   }

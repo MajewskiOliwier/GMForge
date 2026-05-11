@@ -6,7 +6,7 @@
 // ---- Auth ------------------------------------------------
 
 export interface AuthResponse {
-  token: string;
+  jwtToken: string;
   user: User;
 }
 
