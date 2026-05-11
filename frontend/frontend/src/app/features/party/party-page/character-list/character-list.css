@@ -1,15 +1,9 @@
-/* ============================================================
-   GMForge — Character List Styles
-   src/app/features/party/party-page/character-list/character-list.component.css
-   ============================================================ */
-
 .character-list {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
 }
 
-/* ---- Header --------------------------------------------- */
 .list-header {
   display: flex;
   align-items: center;
@@ -28,14 +22,12 @@
   flex-shrink: 0;
 }
 
-/* ---- Grid ----------------------------------------------- */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: var(--space-md);
 }
 
-/* ---- Empty state ---------------------------------------- */
 .empty-list {
   display: flex;
   align-items: center;

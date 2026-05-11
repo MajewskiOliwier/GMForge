@@ -20,6 +20,11 @@ export class UserService {
     return this.http.get<User>(`${this.baseUrl}/me`);
   }
 
+  /** GET /api/users/else/{userName} */
+  getUserByUserName( userName:String): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/else/`+userName);
+  }
+
   /** GET /api/users/me/preferences */
   getPreferences(): Observable<UserPreference> {
     return this.http.get<UserPreference>(`${this.baseUrl}/me/preferences`);

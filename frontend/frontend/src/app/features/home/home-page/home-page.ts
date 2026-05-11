@@ -25,7 +25,6 @@ export class HomePage implements OnInit {
   loading = true;
   error   = '';
 
-  // Create party overlay
   showCreateOverlay = false;
   newPartyName      = '';
   creating          = false;

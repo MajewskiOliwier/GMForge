@@ -1,14 +1,7 @@
-/* ============================================================
-   GMForge — Global Stylesheet
-   All theme tokens live here. Change one variable, change everything.
-   ============================================================ */
-
-/* Google Fonts import */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Share+Tech+Mono&display=swap');
 
 /* ============================================================
    DARK THEME (default)
-   Black & gold — Dishonored aesthetic
    ============================================================ */
 :root,
 body.theme-dark {
@@ -82,7 +75,6 @@ body.theme-dark {
 
 /* ============================================================
    LIGHT THEME
-   Aged parchment & ink — like a worn assassin's dossier
    ============================================================ */
 body.theme-light {
   --bg-base:        #f0ead8;

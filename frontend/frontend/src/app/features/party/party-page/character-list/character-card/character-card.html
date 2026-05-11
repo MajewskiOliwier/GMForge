@@ -6,7 +6,6 @@
   [attr.aria-pressed]="selected"
 >
 
-  <!-- NPC / Player indicator -->
   <div class="card-header">
     @if (character.isNpc) {
       <span class="badge badge-npc">NPC</span>
@@ -18,15 +17,12 @@
     }
   </div>
 
-  <!-- Name -->
   <p class="character-name">{{ character.name }}</p>
 
-  <!-- Owner -->
   @if (!character.isNpc && character.playerUsername) {
     <p class="character-owner">{{ character.playerUsername }}</p>
   }
 
-  <!-- Attribute count hint -->
   <div class="card-footer">
     <span class="attr-hint">
       {{ character.attributes?.length ?? 0 }} attr

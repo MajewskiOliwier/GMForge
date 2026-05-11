@@ -43,8 +43,6 @@ export class PartyService {
     return this.http.delete<void>(`${this.baseUrl}/party/${id}`);
   }
 
-  // ---- Party Member ----------------------------------------
-
   /** GET /api/party-member/:partyId */
   getMembers(partyId: number): Observable<PartyMember[]> {
     return this.http.get<PartyMember[]>(`${this.baseUrl}/party-member/${partyId}`);
@@ -59,8 +57,6 @@ export class PartyService {
   removeMember(partyId: number, userId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/party-member/${partyId}/${userId}`);
   }
-
-  // ---- Party Log -------------------------------------------
 
   /** GET /api/party-log/:partyId */
   getLogs(partyId: number): Observable<PartyLog[]> {

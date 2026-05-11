@@ -55,7 +55,7 @@ export interface PartyMember {
   id: number;
   username: string;
   email: string;
-  isGameMaster: boolean;
+  gameMaster: boolean;
 }
 
 // ---- Session ---------------------------------------------

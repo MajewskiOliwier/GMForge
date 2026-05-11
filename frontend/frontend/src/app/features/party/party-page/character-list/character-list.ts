@@ -9,6 +9,7 @@ import { CharacterCard } from './character-card/character-card';
   templateUrl: './character-list.html',
   styleUrl: './character-list.css'
 })
+
 export class CharacterList {
   @Input() title = '';
   @Input() characters: CharacterModel[] = [];

@@ -1,27 +1,16 @@
-<!-- ============================================================
-     GMForge — Side Panel
-     src/app/shared/components/side-panel/side-panel.component.html
-     ============================================================ -->
-
 <aside class="side-panel">
 
-  <!-- Close button (mobile) -->
   <button class="panel-close btn-icon" (click)="close()" aria-label="Close panel">✕</button>
 
-  <!-- ======================================================
-       CHARACTER MODE
-       ====================================================== -->
   @if (mode === 'character') {
 
     @if (!character) {
-      <!-- Empty state — no character selected -->
       <div class="panel-empty">
         <span class="empty-hex" aria-hidden="true">⬡</span>
         <p>Select a character to view their sheet.</p>
       </div>
     } @else {
 
-      <!-- Character header -->
       <div class="char-header">
         <div class="char-title-row">
           <h3 class="char-name">{{ character.name }}</h3>
@@ -36,7 +25,6 @@
 
       <hr class="divider" />
 
-      <!-- Skills -->
       @if (getSkills().length > 0) {
         <div class="sheet-section">
           <h4 class="section-label">Skills</h4>
@@ -59,7 +47,6 @@
         </div>
       }
 
-      <!-- Styles -->
       @if (getStyles().length > 0) {
         <div class="sheet-section">
           <h4 class="section-label">Styles</h4>
@@ -82,7 +69,6 @@
         </div>
       }
 
-      <!-- Focuses -->
       @if ((character.focuses?.length ?? 0) > 0) {
         <div class="sheet-section">
           <h4 class="section-label">Focuses</h4>
@@ -97,7 +83,6 @@
         </div>
       }
 
-      <!-- Truths -->
       @if ((character.truths?.length  ?? 0 )> 0) {
         <div class="sheet-section">
           <h4 class="section-label">Truths</h4>
@@ -112,7 +97,6 @@
         </div>
       }
 
-      <!-- Items -->
       @if ((character.items?.length ?? 0) > 0) {
         <div class="sheet-section">
           <h4 class="section-label">Items</h4>
@@ -151,9 +135,6 @@
     }
   }
 
-  <!-- ======================================================
-       GM PANEL MODE
-       ====================================================== -->
   @if (mode === 'gm-panel') {
     <div class="gm-panel">
 
@@ -173,7 +154,6 @@
 
       <hr class="divider" />
 
-      <!-- Session control -->
       <div class="sheet-section">
         <h4 class="section-label">Session</h4>
         <button class="btn-primary gm-action-btn" (click)="openSessionOverlay()">
@@ -184,11 +164,61 @@
     </div>
   }
 
+  @if (mode === 'members') {
+
+    <div class="members-panel">
+
+      <div class="char-header">
+        <h3 class="char-name">Party Members</h3>
+
+        <p class="char-player">
+          {{ members.length }} members
+        </p>
+      </div>
+
+      <hr class="divider" />
+
+      @if (members.length === 0) {
+
+        <div class="panel-empty">
+          <span class="empty-hex">⬡</span>
+          <p>No members found.</p>
+        </div>
+
+      } @else {
+
+        <div class="member-list">
+
+          @for (member of members; track member.id) {
+
+            <div class="member-card">
+
+              <div class="member-main">
+
+                <span class="member-name">
+                  {{ member.username }}
+                </span>
+
+                @if (member.gameMaster) {
+                  <span class="badge-gm">GM</span>
+                } @else {
+                  <span class="badge-player">Player</span>
+                }
+
+              </div>
+
+
+            </div>
+          }
+
+        </div>
+
+      }
+
+    </div>
+  }
 </aside>
 
-<!-- ============================================================
-     Session Start Overlay
-     ============================================================ -->
 @if (showSessionOverlay) {
   <div class="overlay-backdrop" (click)="closeSessionOverlay()">
     <div class="overlay-panel" (click)="$event.stopPropagation()">

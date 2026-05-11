@@ -1,8 +1,3 @@
-/* ============================================================
-   GMForge — Character Card Styles
-   src/app/features/party/party-page/character-list/character-card/character-card.component.css
-   ============================================================ */
-
 .character-card {
   display: flex;
   flex-direction: column;

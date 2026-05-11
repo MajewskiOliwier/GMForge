@@ -1,9 +1,3 @@
-/* ============================================================
-   GMForge — Side Panel Styles
-   src/app/shared/components/side-panel/side-panel.component.css
-   ============================================================ */
-
-/* ---- Panel shell ----------------------------------------- */
 .side-panel {
   position: relative;
   background: var(--bg-surface);
@@ -22,7 +16,6 @@
   animation: slideInRight 0.35s ease both;
 }
 
-/* ---- Close button (mobile only) -------------------------- */
 .panel-close {
   display: none;
   position: absolute;
@@ -31,7 +24,6 @@
   z-index: 10;
 }
 
-/* ---- Empty state ----------------------------------------- */
 .panel-empty {
   flex: 1;
   display: flex;
@@ -55,7 +47,6 @@
   letter-spacing: 0.06em;
 }
 
-/* ---- Character header ------------------------------------ */
 .char-header {
   display: flex;
   flex-direction: column;
@@ -82,7 +73,6 @@
   letter-spacing: 0.04em;
 }
 
-/* ---- NPC badge in panel ---------------------------------- */
 .badge-npc-panel {
   background: rgba(155, 35, 53, 0.15);
   color: #c97080;
@@ -95,7 +85,6 @@
   text-transform: uppercase;
 }
 
-/* ---- Sheet section --------------------------------------- */
 .sheet-section {
   display: flex;
   flex-direction: column;
@@ -111,7 +100,6 @@
   margin-bottom: var(--space-xs);
 }
 
-/* ---- Attribute rows -------------------------------------- */
 .attr-list {
   display: flex;
   flex-direction: column;
@@ -165,7 +153,6 @@
   flex-shrink: 0;
 }
 
-/* ---- Focus list ------------------------------------------ */
 .focus-list {
   list-style: none;
   display: flex;
@@ -197,7 +184,6 @@
   color: var(--text-primary);
 }
 
-/* ---- Truth list ------------------------------------------ */
 .truth-list {
   list-style: none;
   display: flex;
@@ -223,7 +209,6 @@
   margin-top: 5px;
 }
 
-/* ---- Item list ------------------------------------------- */
 .item-list {
   display: flex;
   flex-direction: column;
@@ -271,7 +256,6 @@
   margin-top: 2px;
 }
 
-/* ---- GM Panel -------------------------------------------- */
 .gm-panel {
   display: flex;
   flex-direction: column;
@@ -283,7 +267,6 @@
   justify-content: center;
 }
 
-/* ---- Session number badge in overlay --------------------- */
 .session-number-badge {
   text-align: center;
   font-family: var(--font-display);
@@ -305,7 +288,6 @@
   letter-spacing: 0;
 }
 
-/* ---- Spinner -------------------------------------------- */
 .spinner {
   display: inline-block;
   width: 13px;
@@ -318,6 +300,87 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+.members-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.member-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.member-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  background: var(--bg-elevated);
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+
+  padding: var(--space-sm) var(--space-md);
+
+  transition:
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.member-card:hover {
+  border-color: var(--accent-muted);
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px rgba(0,0,0,0.18);
+}
+
+.member-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.member-name {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.badge-gm {
+  background: rgba(212, 175, 55, 0.14);
+  color: #d7b96d;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  flex-shrink: 0;
+}
+
+.badge-player {
+  background: rgba(120, 130, 180, 0.12);
+  color: #9ba7d6;
+  border: 1px solid rgba(120, 130, 180, 0.28);
+
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  flex-shrink: 0;
 }
 
 @media (max-width: 1023px) {

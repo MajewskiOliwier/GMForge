@@ -1,6 +1,5 @@
 <section class="character-list">
 
-  <!-- Section header -->
   <div class="list-header">
     <div class="heading-ornament">
       <h3>{{ title }}</h3>
@@ -12,7 +11,6 @@
     }
   </div>
 
-  <!-- Cards -->
   @if (characters.length > 0) {
     <div class="cards-grid">
       @for (character of characters; track character.id) {

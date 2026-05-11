@@ -1,14 +1,8 @@
-<!-- ============================================================
-     GMForge — Home Page
-     src/app/features/home/home-page/home-page.component.html
-     ============================================================ -->
-
 <app-navbar />
 
 <div class="page-content">
   <div class="container">
 
-    <!-- Page header -->
     <div class="page-header">
       <div class="heading-ornament">
         <h2>Your Parties</h2>
@@ -18,7 +12,6 @@
       </button>
     </div>
 
-    <!-- Loading -->
     @if (loading) {
       <div class="cards-grid">
         @for (i of [1,2,3]; track i) {
@@ -31,7 +24,6 @@
       </div>
     }
 
-    <!-- Error -->
     @if (!loading && error) {
       <div class="state-message">
         <span class="state-icon">⚠</span>
@@ -40,7 +32,6 @@
       </div>
     }
 
-    <!-- Empty state -->
     @if (!loading && !error && parties.length === 0) {
       <div class="state-message">
         <span class="state-icon">⬡</span>
@@ -51,13 +42,11 @@
       </div>
     }
 
-    <!-- Party cards grid -->
     @if (!loading && !error && parties.length > 0) {
       <div class="cards-grid">
         @for (party of parties; track party.id) {
           <a class="party-card" [routerLink]="['/party', party.id]">
 
-            <!-- Card top -->
             <div class="card-top">
               <h3 class="party-name">{{ party.name }}</h3>
               <span class="badge badge-gold">
@@ -65,13 +54,11 @@
               </span>
             </div>
 
-            <!-- GM -->
             <p class="party-gm">
               <span class="label">Game Master</span>
               <span class="value">{{ party.gameMasterUsername }}</span>
             </p>
 
-            <!-- Session -->
             <div class="party-session">
               @if (party.currentSessionNumber > 0) {
                 <span class="badge badge-muted">
@@ -85,7 +72,6 @@
               }
             </div>
 
-            <!-- Arrow -->
             <div class="card-arrow">→</div>
 
           </a>

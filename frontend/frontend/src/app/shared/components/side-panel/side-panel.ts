@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CharacterModel, Party, CharacterAttribute, SkillType, StyleType } from '../../models';
+import {CharacterModel, Party, CharacterAttribute, SkillType, StyleType, PartyMember} from '../../models';
 import { SessionService } from '../../../core/services/session';
 
 @Component({
@@ -11,10 +11,12 @@ import { SessionService } from '../../../core/services/session';
   styleUrl: './side-panel.css'
 })
 export class SidePanel {
-  @Input() mode: 'character' | 'gm-panel' = 'character';
+  @Input() mode: 'character' | 'gm-panel' | 'members' = 'members';
   @Input() character: CharacterModel | null = null;
+
   @Input() party: Party | null = null;
   @Input() isGm = false;
+  @Input() members: PartyMember[] = [];
 
   @Output() sessionCreated = new EventEmitter<void>();
   @Output() panelClose     = new EventEmitter<void>();

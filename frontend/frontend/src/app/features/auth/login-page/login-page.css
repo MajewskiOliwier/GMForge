@@ -33,7 +33,6 @@
   z-index: 1;
 }
 
-/* ---- Card ------------------------------------------------ */
 .auth-card {
   position: relative;
   z-index: 2;
@@ -47,7 +46,6 @@
   animation: slideUp 0.5s ease both;
 }
 
-/* ---- Header --------------------------------------------- */
 .auth-header {
   display: flex;
   flex-direction: column;
@@ -80,7 +78,6 @@
   color: var(--text-primary);
 }
 
-/* Ornament */
 .ornament {
   display: flex;
   align-items: center;
@@ -115,7 +112,6 @@
   color: var(--text-secondary);
 }
 
-/* ---- Form ----------------------------------------------- */
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -133,7 +129,6 @@
   gap: var(--space-sm);
 }
 
-/* ---- Spinner -------------------------------------------- */
 .spinner {
   display: inline-block;
   width: 14px;
@@ -141,14 +136,13 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: currentColor;
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: spin 0.3s linear infinite;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-/* ---- Footer link ---------------------------------------- */
 .auth-footer-link {
   margin-top: var(--space-lg);
   text-align: center;
@@ -169,7 +163,6 @@
   color: var(--accent-bright);
 }
 
-/* ---- Responsive ----------------------------------------- */
 @media (max-width: 480px) {
   .auth-card {
     padding: var(--space-lg) var(--space-md);

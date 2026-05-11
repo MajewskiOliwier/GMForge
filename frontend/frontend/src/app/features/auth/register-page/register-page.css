@@ -1,12 +1,3 @@
-/* ============================================================
-   GMForge — Auth Pages Shared Styles
-   Used by login-page and register-page.
-   src/app/features/authentication/login-page/login-page.component.css
-   src/app/features/authentication/register-page/register-page.component.css
-   (copy this file into both locations)
-   ============================================================ */
-
-/* ---- Root ------------------------------------------------ */
 .auth-root {
   position: relative;
   min-height: 100vh;
@@ -18,7 +9,6 @@
   padding: var(--space-xl) var(--space-md);
 }
 
-/* Subtle grid background */
 .bg-grid {
   position: absolute;
   inset: 0;
@@ -43,7 +33,6 @@
   z-index: 1;
 }
 
-/* ---- Card ------------------------------------------------ */
 .auth-card {
   position: relative;
   z-index: 2;
@@ -57,7 +46,6 @@
   animation: slideUp 0.5s ease both;
 }
 
-/* ---- Header --------------------------------------------- */
 .auth-header {
   display: flex;
   flex-direction: column;
@@ -90,7 +78,6 @@
   color: var(--text-primary);
 }
 
-/* Ornament */
 .ornament {
   display: flex;
   align-items: center;
@@ -125,7 +112,6 @@
   color: var(--text-secondary);
 }
 
-/* ---- Form ----------------------------------------------- */
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -143,7 +129,6 @@
   gap: var(--space-sm);
 }
 
-/* ---- Spinner -------------------------------------------- */
 .spinner {
   display: inline-block;
   width: 14px;
@@ -158,7 +143,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* ---- Footer link ---------------------------------------- */
 .auth-footer-link {
   margin-top: var(--space-lg);
   text-align: center;
@@ -179,7 +163,6 @@
   color: var(--accent-bright);
 }
 
-/* ---- Responsive ----------------------------------------- */
 @media (max-width: 480px) {
   .auth-card {
     padding: var(--space-lg) var(--space-md);

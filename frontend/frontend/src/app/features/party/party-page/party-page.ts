@@ -1,9 +1,4 @@
-// ============================================================
-// GMForge — Party Page
-// src/app/features/party/party-page/party-page.component.ts
-// ============================================================
-
-import { Component, OnInit, inject } from '@angular/core';
+import {Component, OnInit, inject, Output, EventEmitter} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 import { Footer } from '../../../shared/components/footer/footer';
@@ -14,6 +9,8 @@ import { CharacterService } from '../../../core/services/character';
 import { Auth } from '../../../core/services/auth';
 import { Party, PartyMember, CharacterModel } from '../../../shared/models';
 import { RouterLink } from '@angular/router';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UserService} from '../../../core/services/user';
 
 @Component({
   selector: 'app-party-page',
@@ -23,15 +20,19 @@ import { RouterLink } from '@angular/router';
     Footer,
     SidePanel,
     CharacterList,
-    RouterLink
+    RouterLink,
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './party-page.html',
   styleUrl: './party-page.css'
 })
+
 export class PartyPage implements OnInit {
   private route            = inject(ActivatedRoute);
   private partyService     = inject(PartyService);
   private characterService = inject(CharacterService);
+  private userService = inject(UserService);
   private authService      = inject(Auth);
 
   partyId!: number;
@@ -44,7 +45,7 @@ export class PartyPage implements OnInit {
   error   = '';
 
   selectedCharacter: CharacterModel | null = null;
-  panelMode: 'character' | 'gm-panel' = 'character';
+  panelMode: 'character' | 'gm-panel' | 'members' = 'members';
   panelVisible = false; // controls mobile visibility
 
   isGm = false;
@@ -60,7 +61,6 @@ export class PartyPage implements OnInit {
     this.loading = true;
     this.error   = '';
 
-    // Load party detail
     this.partyService.getParty(this.partyId).subscribe({
       next: party => {
         this.party = party;
@@ -79,7 +79,8 @@ export class PartyPage implements OnInit {
       next: members => {
         this.members = members;
         const username = this.currentUser()?.username;
-        this.isGm = members.some(m => m.username === username && m.isGameMaster);
+        this.isGm = username == this.party?.gameMaster.username;
+        console.log("is gm ? "+this.isGm+" username: "+username+", game master=" +this.party?.gameMaster.username);
       },
       error: () => {}
     });
@@ -100,18 +101,13 @@ export class PartyPage implements OnInit {
     });
   }
 
-  // ---- Character selection --------------------------------
-
   onCharacterSelected(character: CharacterModel): void {
     this.selectedCharacter = character;
     this.panelMode         = 'character';
     this.panelVisible      = true;
 
-    // On mobile — scroll to top so the panel appears full screen
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-  // ---- GM panel toggle ------------------------------------
 
   openGmPanel(): void {
     this.selectedCharacter = null;
@@ -124,7 +120,17 @@ export class PartyPage implements OnInit {
     this.panelVisible = false;
   }
 
-  // ---- Session created callback ---------------------------
+  openMembersPanel(): void {
+    if (!this.party) return;
+
+    this.partyService.getMembers(this.party.id).subscribe({
+      next: members => {
+        console.log(members);
+        this.members = members;
+        this.panelMode = 'members';
+      }
+    });
+  }
 
   onSessionCreated(): void {
     // Reload party to show updated currentSession
@@ -133,12 +139,67 @@ export class PartyPage implements OnInit {
     });
   }
 
-  // ---- Add character (placeholder) ----------------------
   onAddPlayerClicked(): void {
     // Future: open add character overlay
   }
 
   onAddNpcClicked(): void {
     // Future: open add NPC overlay
+  }
+
+  showNewPlayerOverlay = false;
+  newPlayerUsername        = '';
+  addingNewPlayer    = false;
+  addPlayerError = '';
+
+  @Output() userAdded = new EventEmitter<void>();
+
+  openNewPlayerOverlay(): void {
+    this.newPlayerUsername     = '';
+    this.addPlayerError = '';
+    this.showNewPlayerOverlay = true;
+  }
+
+  closeNewPlayerOverlay(): void {
+    this.showNewPlayerOverlay = false;
+  }
+
+  confirmAddPlayer(): void {
+    if (!this.party) return;
+
+    this.addingNewPlayer = true;
+
+    this.userService
+      .getUserByUserName(this.newPlayerUsername)
+      .subscribe({
+
+        next: (user) => {
+
+          const userId = user.id;
+
+          this.partyService.addMember(this.party!.id, userId).subscribe({
+
+            next: () => {
+              this.addingNewPlayer = false;
+              this.showNewPlayerOverlay = false;
+
+              this.loadMembers();
+            },
+
+            error: () => {
+              this.addingNewPlayer = false;
+              this.addPlayerError =  'Failed to add member';
+            }
+
+          });
+
+        },
+
+        error: () => {
+          this.addingNewPlayer = false;
+          this.addPlayerError = 'User does not exist';
+        }
+
+      });
   }
 }

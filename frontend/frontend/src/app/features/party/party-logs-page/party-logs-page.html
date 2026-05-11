@@ -1,14 +1,8 @@
-<!-- ============================================================
-     GMForge — Party Logs Page
-     src/app/features/party/party-logs-page/party-logs-page.component.html
-     ============================================================ -->
-
 <app-navbar />
 
 <div class="page-content">
   <div class="container">
 
-    <!-- Header -->
     <div class="logs-header">
       <div class="heading-block">
         <a class="back-link" [routerLink]="['/party', partyId]">← Back to Party</a>
@@ -18,7 +12,6 @@
       </div>
     </div>
 
-    <!-- Add log entry (available to all members) -->
     <div class="add-log-section">
       <div class="form-group">
         <label for="logEntry">New Log Entry</label>
@@ -51,7 +44,6 @@
 
     <hr class="divider" />
 
-    <!-- Loading -->
     @if (loading) {
       <div class="logs-loading">
         <div class="spinner-lg"></div>
@@ -59,7 +51,6 @@
       </div>
     }
 
-    <!-- Error -->
     @if (!loading && error) {
       <div class="logs-empty">
         <span>⚠</span>
@@ -68,7 +59,6 @@
       </div>
     }
 
-    <!-- Empty -->
     @if (!loading && !error && logs.length === 0) {
       <div class="logs-empty">
         <span class="empty-icon">📜</span>
@@ -76,7 +66,6 @@
       </div>
     }
 
-    <!-- Log entries -->
     @if (!loading && !error && logs.length > 0) {
       <ul class="log-list">
         @for (log of logs; track log.id) {

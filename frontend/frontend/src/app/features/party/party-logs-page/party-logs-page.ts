@@ -14,6 +14,7 @@ import {Auth} from '../../../core/services/auth';
   templateUrl: './party-logs-page.html',
   styleUrl: './party-logs-page.css'
 })
+
 export class PartyLogsPage implements OnInit {
   private route        = inject(ActivatedRoute);
   private partyService = inject(PartyService);
