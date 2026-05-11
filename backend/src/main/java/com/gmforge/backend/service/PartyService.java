@@ -42,13 +42,14 @@ public class PartyService {
         Party party = new Party();
         party.setName(request.getName());
         party.setGameMaster(currentUser);
+        System.out.println("current user: "+currentUser+", gameMaster: "+party.getGameMaster());
         partyRepository.save(party);
         return mapToResponse(party);
     }
 
     public List<PartyCardResponse> getMyParties() {
         User currentUser = userService.getCurrentUser();
-        return partyRepository.findAllByGameMaster(currentUser)
+        return partyRepository.findDistinctByGameMasterOrMembers_User(currentUser,currentUser)
                 .stream()
                 .map(this::mapToCardResponse)
                 .toList();

@@ -20,6 +20,9 @@ public class Party {
     @JoinColumn(name = "gm_id", nullable = false)
     private User gameMaster;
 
+    @OneToMany(mappedBy = "party", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PartyMember> members;
+
     @OneToMany(mappedBy = "party")
     private List<Character> characters;
 

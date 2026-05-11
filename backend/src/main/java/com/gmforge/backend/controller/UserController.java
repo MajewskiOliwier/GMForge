@@ -1,5 +1,6 @@
 package com.gmforge.backend.controller;
 
+import com.gmforge.backend.dto.request.CreateSessionRequest;
 import com.gmforge.backend.dto.request.UpdateThemeRequest;
 import com.gmforge.backend.dto.response.UserPreferenceResponse;
 import com.gmforge.backend.dto.response.UserResponse;
@@ -27,6 +28,11 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<List<UserSummaryResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/else/{userName}")
+    public ResponseEntity<UserResponse> getByUserName(@PathVariable String userName) {
+        return ResponseEntity.ok(userService.getByUserName(userName));
     }
 
     @GetMapping("/me")

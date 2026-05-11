@@ -1,5 +1,6 @@
 package com.gmforge.backend.service;
 
+import com.gmforge.backend.dto.request.CreateSessionRequest;
 import com.gmforge.backend.dto.response.UserResponse;
 import com.gmforge.backend.dto.response.UserSummaryResponse;
 import com.gmforge.backend.entity.User;
@@ -43,5 +44,16 @@ public class UserService {
                         user.getEmail()
                 ))
                 .toList();
+    }
+
+    public UserResponse getByUserName(String userName) {
+        User user = userRepository.findByUsername(userName);
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setEmail(user.getEmail());
+
+        return  userResponse;
     }
 }

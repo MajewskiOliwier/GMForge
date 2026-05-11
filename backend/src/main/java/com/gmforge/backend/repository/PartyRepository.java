@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface PartyRepository extends JpaRepository<Party, Long> {
     List<Party> findAllByGameMaster(User gameMaster);
+    List<Party> findDistinctByGameMasterOrMembers_User(
+            User gameMaster,
+            User member
+    );
 }
