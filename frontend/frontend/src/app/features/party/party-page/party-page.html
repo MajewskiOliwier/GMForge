@@ -25,38 +25,25 @@
           <a class="back-link" routerLink="/home">← Parties</a>
           <h2 class="party-title">{{ party.name }}</h2>
           <div class="party-meta">
+            <span class="badge badge-muted">GM: {{ party.gameMaster.username }}</span>
             <span class="badge badge-muted">
-              GM: {{ party.gameMaster.username }}
-            </span>
-            <span class="badge badge-muted">
-              {{ party.memberCount }} {{ party.memberCount === 1 ? 'member' : 'members' }}
+              {{ party.memberCount }} {{ party.memberCount === 1 ? 'player' : 'players' }}
             </span>
             @if (party.currentSession) {
               <span class="badge badge-gold">
                 Session {{ party.currentSession.sessionNumber }}
-                @if (party.currentSession.name) {
-                  — {{ party.currentSession.name }}
-                }
+                @if (party.currentSession.name) { — {{ party.currentSession.name }} }
               </span>
             }
           </div>
         </div>
 
         <div class="party-actions">
-          <a class="btn-ghost logs-btn" [routerLink]="['/party', partyId, 'logs']">
-            📜 Logs
-          </a>
-          <button class="btn-ghost logs-btn" (click)="openMembersPanel()">
-            Members
-          </button>
-
+          <a class="btn-ghost logs-btn" [routerLink]="['/party', partyId, 'logs']">📜 Logs</a>
+          <button class="btn-ghost logs-btn" (click)="openMembersPanel()">Members</button>
           @if (isGm) {
-            <button class="btn-primary" (click)="openGmPanel()">
-              ⚙ GM Panel
-            </button>
-            <button class="btn-primary" (click)="openNewPlayerOverlay()">
-              ✚ Add player
-            </button>
+            <button class="btn-primary" (click)="openGmPanel()">⚙ GM Panel</button>
+            <button class="btn-primary" (click)="openNewPlayerOverlay()">✚ Add player</button>
           }
         </div>
       </div>
@@ -64,16 +51,14 @@
       <div class="party-layout">
 
         <div class="character-section">
-
           <app-character-list
             title="Characters"
             [characters]="playerCharacters"
-            [canAdd]="true"
+            [canAdd]="!isGm"
             [selectedCharacterId]="selectedCharacter?.id ?? null"
             (characterSelected)="onCharacterSelected($event)"
             (addClicked)="onAddPlayerClicked()"
           />
-
           <div class="npc-section">
             <app-character-list
               title="NPCs"
@@ -84,7 +69,6 @@
               (addClicked)="onAddNpcClicked()"
             />
           </div>
-
         </div>
 
         <div class="panel-wrapper" [class.panel-visible]="panelVisible">
@@ -94,8 +78,11 @@
             [party]="party"
             [isGm]="isGm"
             [members]="members"
+            [partyId]="partyId"
             (sessionCreated)="onSessionCreated()"
             (panelClose)="closePanel()"
+            (memberKicked)="onMemberKicked()"
+            (characterSaved)="onCharacterSaved()"
           />
         </div>
 
@@ -109,54 +96,235 @@
 
 @if (showNewPlayerOverlay) {
   <div class="overlay-backdrop" (click)="closeNewPlayerOverlay()">
-
     <div class="overlay-panel" (click)="$event.stopPropagation()">
-
-      <h3>Add new member</h3>
-
+      <h3>Add new player</h3>
       <div class="form-group">
-        <label for="newPlayerUsername">New player</label>
-
+        <label for="newPlayerUsername">Username</label>
         <input
           id="newPlayerUsername"
           type="text"
-          [(ngModel)]=newPlayerUsername
+          [(ngModel)]="newPlayerUsername"
           placeholder="e.g. NewPlayer123987"
           [disabled]="addingNewPlayer"
           (keyup.enter)="confirmAddPlayer()"
         />
-
-        @if (addPlayerError) {
-          <p class="overlay-error">
-            {{ addPlayerError }}
-          </p>
+        @if (addMemberError) {
+          <p class="overlay-error">{{ addMemberError }}</p>
         }
       </div>
-
       <div class="overlay-actions">
-
-        <button
-          class="btn-ghost"
-          (click)="closeNewPlayerOverlay()"
-          [disabled]="addingNewPlayer">
-
-          Cancel
+        <button class="btn-ghost" (click)="closeNewPlayerOverlay()" [disabled]="addingNewPlayer">Cancel</button>
+        <button class="btn-primary" (click)="confirmAddPlayer()" [disabled]="addingNewPlayer">
+          @if (addingNewPlayer) { <span class="spinner"></span> Adding… } @else { Confirm }
         </button>
+      </div>
+    </div>
+  </div>
+}
 
-        <button
-          class="btn-primary"
-          (click)="confirmAddPlayer()"
-          [disabled]="addingNewPlayer">
+@if (showAddPlayerOverlay) {
+  <div class="overlay-backdrop" (click)="closeAddPlayerOverlay()">
+    <div class="overlay-panel overlay-large" (click)="$event.stopPropagation()">
+      <h3>Create Your Character</h3>
 
-          @if (addingNewPlayer) {
-            <span class="spinner"></span>
-            Adding…
-          } @else {
-            Confirm
+      <div class="form-group">
+        <label for="playerName">Character Name</label>
+        <input id="playerName" type="text" [(ngModel)]="newPlayerName"
+               placeholder="e.g. Corvo" [disabled]="creatingPlayer" />
+      </div>
+
+      <hr class="divider" />
+
+      <div class="overlay-section">
+        <span class="section-label">Skills</span>
+        <div class="attr-grid">
+          @for (entry of playerSkills; track entry.skill) {
+            <div class="attr-cell">
+              <span class="attr-cell-label">{{ entry.skill }}</span>
+              <select [(ngModel)]="entry.level" class="attr-cell-select" [disabled]="creatingPlayer">
+                @for (n of [4,5,6,7,8]; track n) {
+                  <option [value]="n">{{ n }}</option>
+                }
+              </select>
+            </div>
           }
+        </div>
 
+        <span class="section-label" style="margin-top: var(--space-md); display:block;">Styles</span>
+        <div class="attr-grid">
+          @for (entry of playerStyles; track entry.style) {
+            <div class="attr-cell">
+              <span class="attr-cell-label">{{ entry.style }}</span>
+              <select [(ngModel)]="entry.level" class="attr-cell-select" [disabled]="creatingPlayer">
+                @for (n of [4,5,6,7,8]; track n) {
+                  <option [ngValue]="n" >{{ n }}</option>
+                }
+              </select>
+            </div>
+          }
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="overlay-section">
+        <div class="overlay-section-header">
+          <span class="section-label">Focuses</span>
+          <button class="btn-ghost add-row-btn" (click)="addPlayerFocus()" [disabled]="creatingPlayer">+ Add</button>
+        </div>
+        @for (focus of playerFocuses; track $index) {
+          <div class="focus-form-row">
+            <select [(ngModel)]="focus.level" class="focus-level-select" [disabled]="creatingPlayer">
+              @for (n of [2,3,4,5]; track n) { <option [value]="n">{{ n }}</option> }
+            </select>
+            <input type="text" [(ngModel)]="focus.text" placeholder="e.g. Swordsmanship"
+                   class="focus-text-input" [disabled]="creatingPlayer" />
+            <button class="btn-icon remove-row-btn" (click)="removePlayerFocus($index)" [disabled]="creatingPlayer" title="Remove">✕</button>
+          </div>
+        }
+        @if (playerFocuses.length === 0) { <p class="overlay-empty-hint">No focuses yet.</p> }
+      </div>
+
+      <hr class="divider" />
+
+      <div class="overlay-section">
+        <div class="overlay-section-header">
+          <span class="section-label">Items</span>
+          <button class="btn-ghost add-row-btn" (click)="addPlayerItem()" [disabled]="creatingPlayer">+ Add</button>
+        </div>
+        @for (item of playerItems; track $index) {
+          <div class="item-form-block">
+            <div class="item-form-row">
+              <input type="text" [(ngModel)]="item.name" placeholder="Item name"
+                     class="item-name-input" [disabled]="creatingPlayer" />
+              <select [(ngModel)]="item.type" class="item-type-select" [disabled]="creatingPlayer">
+                @for (t of itemTypeOptions; track t) { <option [value]="t">{{ t }}</option> }
+              </select>
+              <button class="btn-icon remove-row-btn" (click)="removePlayerItem($index)" [disabled]="creatingPlayer" title="Remove">✕</button>
+            </div>
+            <input type="text" [(ngModel)]="item.description" placeholder="Description"
+                   class="item-desc-input" [disabled]="creatingPlayer" />
+          </div>
+        }
+        @if (playerItems.length === 0) { <p class="overlay-empty-hint">No items yet.</p> }
+      </div>
+
+      @if (addPlayerError) { <p class="form-error">{{ addPlayerError }}</p> }
+      <div class="overlay-actions">
+        <button class="btn-ghost" (click)="closeAddPlayerOverlay()" [disabled]="creatingPlayer">Cancel</button>
+        <button class="btn-primary" (click)="submitAddPlayer()" [disabled]="creatingPlayer">
+          @if (creatingPlayer) { <span class="spinner"></span> Creating… } @else { Create }
         </button>
+      </div>
+    </div>
+  </div>
+}
 
+@if (showAddNpcOverlay) {
+  <div class="overlay-backdrop" (click)="closeAddNpcOverlay()">
+    <div class="overlay-panel overlay-large" (click)="$event.stopPropagation()">
+      <h3>Create NPC</h3>
+
+      <div class="form-group">
+        <label for="npcName">NPC Name</label>
+        <input id="npcName" type="text" [(ngModel)]="newNpcName"
+               placeholder="e.g. The Outsider" [disabled]="creatingNpc" />
+      </div>
+
+      <hr class="divider" />
+
+      <div class="overlay-section">
+        <span class="section-label">Skills</span>
+        <div class="attr-grid">
+          @for (entry of npcSkills; track entry.skill) {
+            <div class="attr-cell">
+              <span class="attr-cell-label">{{ entry.skill }}</span>
+              <select [(ngModel)]="entry.level" class="attr-cell-select" [disabled]="creatingNpc">
+                @for (n of [4,5,6,7,8]; track n) {
+                  <option [ngValue]="n">{{ n }}</option>
+                }
+              </select>
+            </div>
+          }
+        </div>
+
+        <span class="section-label" style="margin-top: var(--space-md); display:block;">Styles</span>
+        <div class="attr-grid">
+          @for (entry of npcStyles; track entry.style) {
+            <div class="attr-cell">
+              <span class="attr-cell-label">{{ entry.style }}</span>
+              <select [(ngModel)]="entry.level" class="attr-cell-select" [disabled]="creatingNpc">
+                @for (n of [4,5,6,7,8]; track n) {
+                  <option [ngValue]="n">{{ n }}</option>
+                }
+              </select>
+            </div>
+          }
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="overlay-section">
+        <div class="overlay-section-header">
+          <span class="section-label">Focuses</span>
+          <button class="btn-ghost add-row-btn" (click)="addNpcFocus()" [disabled]="creatingNpc">+ Add</button>
+        </div>
+        @for (focus of npcFocuses; track $index) {
+          <div class="focus-form-row">
+            <select [(ngModel)]="focus.level" class="focus-level-select" [disabled]="creatingNpc">
+              @for (n of [2,3,4,5]; track n) { <option [value]="n">{{ n }}</option> }
+            </select>
+            <input type="text" [(ngModel)]="focus.text" placeholder="e.g. Manipulation"
+                   class="focus-text-input" [disabled]="creatingNpc" />
+            <button class="btn-icon remove-row-btn" (click)="removeNpcFocus($index)" [disabled]="creatingNpc" title="Remove">✕</button>
+          </div>
+        }
+        @if (npcFocuses.length === 0) { <p class="overlay-empty-hint">No focuses yet.</p> }
+      </div>
+
+      <hr class="divider" />
+
+      <div class="overlay-section">
+        <div class="overlay-section-header">
+          <span class="section-label">Items</span>
+          <button class="btn-ghost add-row-btn" (click)="addNpcItem()" [disabled]="creatingNpc">+ Add</button>
+        </div>
+        @for (item of npcItems; track $index) {
+          <div class="item-form-block">
+            <div class="item-form-row">
+              <input type="text" [(ngModel)]="item.name" placeholder="Item name"
+                     class="item-name-input" [disabled]="creatingNpc" />
+              <select [(ngModel)]="item.type" class="item-type-select" [disabled]="creatingNpc">
+                @for (t of itemTypeOptions; track t) { <option [value]="t">{{ t }}</option> }
+              </select>
+              <button class="btn-icon remove-row-btn" (click)="removeNpcItem($index)" [disabled]="creatingNpc" title="Remove">✕</button>
+            </div>
+            <input type="text" [(ngModel)]="item.description" placeholder="Description"
+                   class="item-desc-input" [disabled]="creatingNpc" />
+            <label class="hidden-toggle">
+              <input type="checkbox" [(ngModel)]="item.isHidden" [disabled]="creatingNpc" />
+              Hidden from players
+            </label>
+            @if (item.isHidden) {
+              <input type="text" [(ngModel)]="item.hiddenName"
+                     placeholder="Name shown to players (e.g. ???)"
+                     class="item-desc-input" [disabled]="creatingNpc" />
+              <input type="text" [(ngModel)]="item.hiddenDescription"
+                     placeholder="Description shown to players"
+                     class="item-desc-input" [disabled]="creatingNpc" />
+            }
+          </div>
+        }
+        @if (npcItems.length === 0) { <p class="overlay-empty-hint">No items yet.</p> }
+      </div>
+
+      @if (addNpcError) { <p class="form-error">{{ addNpcError }}</p> }
+      <div class="overlay-actions">
+        <button class="btn-ghost" (click)="closeAddNpcOverlay()" [disabled]="creatingNpc">Cancel</button>
+        <button class="btn-primary" (click)="submitAddNpc()" [disabled]="creatingNpc">
+          @if (creatingNpc) { <span class="spinner"></span> Creating… } @else { Create }
+        </button>
       </div>
     </div>
   </div>

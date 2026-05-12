@@ -8,6 +8,7 @@ import { CharacterModel } from '../../../../../shared/models';
   templateUrl: './character-card.html',
   styleUrl: './character-card.css'
 })
+
 export class CharacterCard{
   @Input() character!: CharacterModel;
   @Input() selected = false;

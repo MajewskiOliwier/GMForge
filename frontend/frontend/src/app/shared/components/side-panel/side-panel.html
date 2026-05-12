@@ -3,7 +3,6 @@
   <button class="panel-close btn-icon" (click)="close()" aria-label="Close panel">✕</button>
 
   @if (mode === 'character') {
-
     @if (!character) {
       <div class="panel-empty">
         <span class="empty-hex" aria-hidden="true">⬡</span>
@@ -11,125 +10,247 @@
       </div>
     } @else {
 
+      <!-- Character header -->
       <div class="char-header">
         <div class="char-title-row">
-          <h3 class="char-name">{{ character.name }}</h3>
+          @if (editMode) {
+            <input
+              class="edit-name-input"
+              type="text"
+              [(ngModel)]="editName"
+              placeholder="Character name"
+            />
+          } @else {
+            <h3 class="char-name">{{ character.name }}</h3>
+          }
           @if (character.isNpc) {
             <span class="badge badge-npc-panel">NPC</span>
+          }
+          <!-- Edit / Save / Cancel toggle -->
+          @if (!editMode) {
+            <button class="btn-icon edit-toggle" (click)="enterEditMode()" title="Edit character" aria-label="Edit character">
+              ⚙
+            </button>
+          } @else {
+            <div class="edit-actions">
+              <button class="btn-ghost edit-cancel-btn" (click)="cancelEdit()" [disabled]="savingEdit">Cancel</button>
+              <button class="btn-primary edit-save-btn" (click)="saveAll()" [disabled]="savingEdit">
+                @if (savingEdit) {
+                  <span class="spinner"></span>
+                } @else {
+                  Save
+                }
+              </button>
+            </div>
           }
         </div>
         @if (!character.isNpc && character.playerUsername) {
           <p class="char-player">Played by {{ character.playerUsername }}</p>
         }
+        @if (saveError) {
+          <p class="save-error">{{ saveError }}</p>
+        }
       </div>
 
       <hr class="divider" />
 
-      @if (getSkills().length > 0) {
-        <div class="sheet-section">
-          <h4 class="section-label">Skills</h4>
-          <div class="attr-list">
-            @for (attr of getSkills(); track attr.id) {
-              <div class="attr-row">
-                <span class="attr-name">{{ attr.skill }}</span>
-                <div class="attr-dots">
-                  @for (dot of levelDots(attr.level); track dot) {
-                    <span
-                      class="dot"
-                      [class.filled]="dot <= attr.level"
-                    ></span>
-                  }
-                </div>
-                <span class="attr-level">{{ attr.level }}</span>
-              </div>
-            }
-          </div>
-        </div>
-      }
-
-      @if (getStyles().length > 0) {
-        <div class="sheet-section">
-          <h4 class="section-label">Styles</h4>
-          <div class="attr-list">
-            @for (attr of getStyles(); track attr.id) {
-              <div class="attr-row">
-                <span class="attr-name">{{ attr.style }}</span>
-                <div class="attr-dots">
-                  @for (dot of levelDots(attr.level); track dot) {
-                    <span
-                      class="dot"
-                      [class.filled]="dot <= attr.level"
-                    ></span>
-                  }
-                </div>
-                <span class="attr-level">{{ attr.level }}</span>
-              </div>
-            }
-          </div>
-        </div>
-      }
-
-      @if ((character.focuses?.length ?? 0) > 0) {
-        <div class="sheet-section">
-          <h4 class="section-label">Focuses</h4>
-          <ul class="focus-list">
-            @for (focus of character.focuses; track focus.id) {
-              <li class="focus-item">
-                <span class="focus-level">{{ focus.level }}</span>
-                <span class="focus-text">{{ focus.text }}</span>
-              </li>
-            }
-          </ul>
-        </div>
-      }
-
-      @if ((character.truths?.length  ?? 0 )> 0) {
-        <div class="sheet-section">
-          <h4 class="section-label">Truths</h4>
-          <ul class="truth-list">
-            @for (truth of character.truths; track truth.id) {
-              <li class="truth-item">
-                <span class="truth-diamond" aria-hidden="true">◆</span>
-                {{ truth.name }}
-              </li>
-            }
-          </ul>
-        </div>
-      }
-
-      @if ((character.items?.length ?? 0) > 0) {
-        <div class="sheet-section">
-          <h4 class="section-label">Items</h4>
-          <div class="item-list">
-            @for (item of character.items; track item.id) {
-              <div class="item-card">
-                <div class="item-header">
-                  <!-- GMs see hidden name, players see real name or ??? -->
-                  <span class="item-name">
-                    @if (item.isHidden && !isGm) {
-                      {{ item.hiddenName ?? '???' }}
-                    } @else {
-                      {{ item.name }}
+      <!-- Skills -->
+      @if (editMode) {
+        @if (editSkills.length > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Skills</h4>
+            <div class="attr-list">
+              @for (attr of editSkills; track attr.id) {
+                <div class="attr-row">
+                  <span class="attr-name">{{ attr.skill }}</span>
+                  <select class="attr-select" [(ngModel)]="attr.level">
+                    @for (n of levelRange(); track n) {
+                      <option [value]="n">{{ n }}</option>
                     }
-                  </span>
-                  <span class="badge badge-muted item-type">{{ item.type }}</span>
+                  </select>
+                  <div class="attr-dots">
+                    @for (dot of levelDots(); track dot) {
+                      <span class="dot" [class.filled]="dot <= attr.level"></span>
+                    }
+                  </div>
                 </div>
-                <p class="item-desc">
-                  @if (item.isHidden && !isGm) {
-                    {{ item.hiddenDescription ?? 'Unknown.' }}
-                  } @else {
-                    {{ item.description }}
-                  }
-                </p>
-                @if (item.isHidden && isGm) {
-                  <p class="item-hidden-note">
-                    🔒 Hidden as: <em>{{ item.hiddenName ?? '???' }}</em>
-                  </p>
-                }
-              </div>
-            }
+              }
+            </div>
           </div>
-        </div>
+        }
+      } @else {
+        @if (getSkills().length > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Skills</h4>
+            <div class="attr-list">
+              @for (attr of getSkills(); track attr.id) {
+                <div class="attr-row">
+                  <span class="attr-name">{{ attr.skill }}</span>
+                  <div class="attr-dots">
+                    @for (dot of levelDots(); track dot) {
+                      <span class="dot" [class.filled]="dot <= attr.level"></span>
+                    }
+                  </div>
+                  <span class="attr-level">{{ attr.level }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+
+      <!-- Styles -->
+      @if (editMode) {
+        @if (editStyles.length > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Styles</h4>
+            <div class="attr-list">
+              @for (attr of editStyles; track attr.id) {
+                <div class="attr-row">
+                  <span class="attr-name">{{ attr.style }}</span>
+                  <select class="attr-select" [(ngModel)]="attr.level">
+                    @for (n of levelRange(); track n) {
+                      <option [value]="n">{{ n }}</option>
+                    }
+                  </select>
+                  <div class="attr-dots">
+                    @for (dot of levelDots(); track dot) {
+                      <span class="dot" [class.filled]="dot <= attr.level"></span>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      } @else {
+        @if (getStyles().length > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Styles</h4>
+            <div class="attr-list">
+              @for (attr of getStyles(); track attr.id) {
+                <div class="attr-row">
+                  <span class="attr-name">{{ attr.style }}</span>
+                  <div class="attr-dots">
+                    @for (dot of levelDots(); track dot) {
+                      <span class="dot" [class.filled]="dot <= attr.level"></span>
+                    }
+                  </div>
+                  <span class="attr-level">{{ attr.level }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+
+      <!-- Focuses -->
+      @if (editMode) {
+        @if (editFocuses.length > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Focuses</h4>
+            <ul class="focus-list">
+              @for (focus of editFocuses; track focus.id) {
+                <li class="focus-item focus-item-edit">
+                  <select class="focus-level-select" [(ngModel)]="focus.level">
+                    @for (n of [2,3,4,5]; track n) {
+                      <option [value]="n">{{ n }}</option>
+                    }
+                  </select>
+                  <input class="focus-text-input" type="text" [(ngModel)]="focus.text" />
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      } @else {
+        @if (character && (character.focuses?.length ?? 0) > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Focuses</h4>
+            <ul class="focus-list">
+              @for (focus of character.focuses; track focus.id) {
+                <li class="focus-item">
+                  <span class="focus-level">{{ focus.level }}</span>
+                  <span class="focus-text">{{ focus.text }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      }
+
+      <!-- Truths -->
+      @if (editMode) {
+        @if (editTruths.length > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Truths</h4>
+            <ul class="truth-list">
+              @for (truth of editTruths; track truth.id) {
+                <li class="truth-item-edit">
+                  <span class="truth-diamond" aria-hidden="true">◆</span>
+                  <input class="truth-input" type="text" [(ngModel)]="truth.name" />
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      } @else {
+        @if (character && (character.truths?.length ?? 0) > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Truths</h4>
+            <ul class="truth-list">
+              @for (truth of character.truths; track truth.id) {
+                <li class="truth-item">
+                  <span class="truth-diamond" aria-hidden="true">◆</span>
+                  {{ truth.name }}
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      }
+
+      <!-- Items -->
+      @if (editMode) {
+        @if (editItems.length > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Items</h4>
+            <div class="item-list">
+              @for (item of editItems; track item.id) {
+                <div class="item-card">
+                  <input class="item-name-input" type="text" [(ngModel)]="item.name" placeholder="Item name" />
+                  <textarea class="item-desc-input" [(ngModel)]="item.description" rows="2" placeholder="Description"></textarea>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      } @else {
+        @if  (character && (character.items?.length ?? 0) > 0) {
+          <div class="sheet-section">
+            <h4 class="section-label">Items</h4>
+            <div class="item-list">
+              @for (item of character.items; track item.id) {
+                <div class="item-card">
+                  <div class="item-header">
+                    <span class="item-name">
+                      @if (item.isHidden && !isGm) { {{ item.hiddenName ?? '???' }} }
+                      @else { {{ item.name }} }
+                    </span>
+                    <span class="badge badge-muted item-type">{{ item.type }}</span>
+                  </div>
+                  <p class="item-desc">
+                    @if (item.isHidden && !isGm) { {{ item.hiddenDescription ?? 'Unknown.' }} }
+                    @else { {{ item.description }} }
+                  </p>
+                  @if (item.isHidden && isGm) {
+                    <p class="item-hidden-note">🔒 Hidden as: <em>{{ item.hiddenName ?? '???' }}</em></p>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
       }
 
     }

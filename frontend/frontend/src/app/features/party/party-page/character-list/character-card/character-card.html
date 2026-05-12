@@ -1,13 +1,13 @@
 <button
   class="character-card"
   [class.selected]="selected"
-  [class.npc]="character.isNpc"
+  [class.npc]="character.npc"
   (click)="onClick()"
   [attr.aria-pressed]="selected"
 >
 
   <div class="card-header">
-    @if (character.isNpc) {
+    @if (character.npc) {
       <span class="badge badge-npc">NPC</span>
     } @else {
       <span class="badge badge-player">Player</span>
@@ -19,14 +19,11 @@
 
   <p class="character-name">{{ character.name }}</p>
 
-  @if (!character.isNpc && character.playerUsername) {
+  @if (!character.npc && character.playerUsername) {
     <p class="character-owner">{{ character.playerUsername }}</p>
   }
 
   <div class="card-footer">
-    <span class="attr-hint">
-      {{ character.attributes?.length ?? 0 }} attr
-    </span>
     <span class="attr-hint">
       {{ character.focuses?.length ?? 0 }} focus
     </span>

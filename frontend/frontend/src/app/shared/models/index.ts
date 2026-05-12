@@ -81,7 +81,7 @@ export interface PartyLog {
 export interface CharacterModel {
   id: number;
   name: string;
-  isNpc: boolean;
+  npc: boolean;
   playerUsername: string | null; // null for NPCs
   attributes?: CharacterAttribute[];
   focuses?: Focus[];

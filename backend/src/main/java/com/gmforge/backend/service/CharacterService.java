@@ -59,9 +59,14 @@ public class CharacterService {
         boolean isGm = party.getGameMaster().getId().equals(currentUser.getId());
 
         System.out.println("request id = "+request.getUserId() + ", gm id = "+party.getGameMaster().getId()+ " , current user = "+currentUser.getId());
-//
-        if (request.getUserId() == null) {
-            throw new RuntimeException("Only the GM can create NPCs");
+
+        if (request.getUserId() != null) {
+            User player = userRepository.findById(request.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            character.setPlayer(player);
+        } else {
+            character.setPlayer(null);
         }
 
         characterRepository.save(character);
