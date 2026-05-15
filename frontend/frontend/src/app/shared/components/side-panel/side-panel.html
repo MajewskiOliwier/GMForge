@@ -23,10 +23,10 @@
           } @else {
             <h3 class="char-name">{{ character.name }}</h3>
           }
-          @if (character.isNpc) {
+          @if (character.npc) {
             <span class="badge badge-npc-panel">NPC</span>
           }
-          <!-- Edit / Save / Cancel toggle -->
+
           @if (!editMode) {
             <button class="btn-icon edit-toggle" (click)="enterEditMode()" title="Edit character" aria-label="Edit character">
               ⚙
@@ -44,7 +44,7 @@
             </div>
           }
         </div>
-        @if (!character.isNpc && character.playerUsername) {
+        @if (!character.npc && character.playerUsername) {
           <p class="char-player">Played by {{ character.playerUsername }}</p>
         }
         @if (saveError) {
