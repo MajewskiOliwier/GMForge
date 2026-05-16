@@ -25,11 +25,6 @@ public class UserController {
         this.userPreferenceService = userPreferenceService;
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<UserSummaryResponse>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
-    }
-
     @GetMapping("/else/{userName}")
     public ResponseEntity<UserResponse> getByUserName(@PathVariable String userName) {
         return ResponseEntity.ok(userService.getByUserName(userName));

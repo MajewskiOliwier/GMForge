@@ -22,6 +22,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
+
     @Column(nullable = false, unique = true)
     @Email
     private String email;
