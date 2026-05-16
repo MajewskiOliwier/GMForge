@@ -1,19 +1,33 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: gmforge-ingress
+  name: gmforge-ingress-backend
+  namespace: gmforge
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /api/$2
 spec:
   ingressClassName: nginx
   rules:
     - http:
         paths:
-          - path: /api
-            pathType: Prefix
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: backend-service
                 port:
                   number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gmforge-ingress-frontend
+  namespace: gmforge
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
           - path: /
             pathType: Prefix
             backend:

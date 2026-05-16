@@ -2,17 +2,21 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql
+  namespace: gmforge
 spec:
   selector:
     matchLabels:
       app: mysql
+      env: gmforge
   serviceName: mysql-service
   replicas: 1
   template:
     metadata:
       labels:
         app: mysql
+        env: gmforge
     spec:
+      serviceAccountName: mysql-sa
       containers:
         - name: mysql
           image: mysql:8.0
@@ -29,6 +33,13 @@ spec:
                 secretKeyRef:
                   name: mysql-secret
                   key: mysql-database
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
@@ -36,7 +47,8 @@ spec:
     - metadata:
         name: mysql-storage
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: gmforge-storage
         resources:
           requests:
             storage: 1Gi
@@ -45,9 +57,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mysql-service
+  namespace: gmforge
 spec:
   selector:
     app: mysql
+    env: gmforge
   ports:
     - port: 3306
       targetPort: 3306

@@ -1,5 +1,90 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backend-sa
+  namespace: gmforge
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mysql-sa
+  namespace: gmforge
+---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: AuthorizationConfiguration
-authorizers:
-  type: RBAC
-
+kind: Role
+metadata:
+  name: backend-config-reader
+  namespace: gmforge
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["backend-config"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["mysql-secret"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-config-reader-binding
+  namespace: gmforge
+subjects:
+  - kind: ServiceAccount
+    name: backend-sa
+    namespace: gmforge
+roleRef:
+  kind: Role
+  name: backend-config-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: logs-reader
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: logs-reader-binding
+  namespace: gmforge
+subjects:
+  - kind: ServiceAccount
+    name: backend-sa
+    namespace: gmforge
+roleRef:
+  kind: ClusterRole
+  name: logs-reader
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mysql-manager
+  namespace: gmforge
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "create", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mysql-manager-binding
+  namespace: gmforge
+subjects:
+  - kind: ServiceAccount
+    name: mysql-sa
+    namespace: gmforge
+roleRef:
+  kind: Role
+  name: mysql-manager
+  apiGroup: rbac.authorization.k8s.io
