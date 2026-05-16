@@ -52,6 +52,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
+                "http://localhost",
                 "http://localhost:4200",
                 "http://frontend.minikube.local"
         ));
