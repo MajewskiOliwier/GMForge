@@ -105,6 +105,8 @@ Ruch wchodzący przez Ingress jest kierowany:
 
 #### 1. Uruchom Minikube i włącz Ingress
 
+Uruchomić Docker Desktop 
+
 ```powershell
 minikube start
 minikube addons enable ingress
@@ -132,6 +134,9 @@ kubectl apply -f mysql.yaml
 kubectl apply -f backend.yaml
 kubectl apply -f frontend.yaml
 kubectl apply -f ingress.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f storageclass.yaml
+kubectl apply -f namespace.yaml
 ```
 
 #### 4. Sprawdź status podów
@@ -187,3 +192,21 @@ Backend odczytuje konfigurację ze zmiennych środowiskowych wstrzykiwanych prze
 | `DB_USER` | - | Użytkownik bazy danych |
 | `DB_PASSWORD` | Secret | Hasło do bazy danych |
 | `JWT_SECRET` | Secret | Klucz do podpisywania tokenów JWT |
+
+
+
+Elementy wygenerowane przez sztuczną inteligencje:
+- Dokumentacje README
+- Wartswta graficzna w postaci plików css na frontendzie
+- zawartość "rules" w pierwszym obiekcie w pliku "ingress.yaml"
+- metoda "corsConfigurationSource" w SecurityConfig
+- Część requestów/responsów na backendzie
+
+
+użyte LLM:
+- https://chatgpt.com/share/69fda617-c458-83eb-a26d-ea035e5eb034
+- https://chatgpt.com/share/6a09f4ff-7278-83eb-9399-14ed60e9ba61
+- https://claude.ai/share/3bbdb256-6896-47df-b06a-a755d87eb490
+- https://claude.ai/share/133ea476-38ee-420a-b605-48352cc138a2
+- https://chatgpt.com/share/6a09f5d7-27ac-83eb-9478-193ceca3ea5a
+- https://chatgpt.com/share/6a09f601-6740-83eb-b842-ae6998ab5a32
