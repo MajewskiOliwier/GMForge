@@ -7,12 +7,16 @@ import com.gmforge.backend.dto.response.AuthResponse;
 import com.gmforge.backend.dto.response.UserResponse;
 import com.gmforge.backend.entity.User;
 import com.gmforge.backend.entity.UserPreference;
+import com.gmforge.backend.enums.RoleType;
 import com.gmforge.backend.repository.UserPreferenceRepository;
 import com.gmforge.backend.repository.UserRepository;
+import com.gmforge.backend.util.RoleHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.gmforge.backend.enums.RoleType.USER;
 
 @Service
 public class AuthService {
@@ -22,17 +26,19 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final RoleHelper roleHelper;
 
     public AuthService(UserRepository userRepository,
                        UserPreferenceRepository userPreferenceRepository,
                        PasswordEncoder passwordEncoder,
                        JwtUtil jwtUtil,
-                       AuthenticationManager authenticationManager) {
+                       AuthenticationManager authenticationManager, RoleHelper roleHelper) {
         this.userRepository = userRepository;
         this.userPreferenceRepository = userPreferenceRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.roleHelper = roleHelper;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -47,6 +53,7 @@ public class AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole(roleHelper.getRole(USER.toString()));
         userRepository.save(user);
 
         UserPreference preference = new UserPreference();
